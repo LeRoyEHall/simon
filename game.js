@@ -10,7 +10,7 @@ $('body').on("keydown", (event) => {
     }
 })
 
-$('body').on("touchstart", (event) => {
+$('body').on("touchend", (event) => {
     if (!gameStarted) {
         nextSequence();
     }
