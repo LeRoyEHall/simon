@@ -2,26 +2,31 @@ buttonColors = ["red", "blue", "green", "yellow"];
 gamePattern = [];
 userClickPattern = [];
 gameStarted = false;
+userTurn = false;
 level = 0;
 
 $('body').on("keydown", (event) => {
-    if (!gameStarted) {
-        setTimeout(() => nextSequence(), 500);
-    }
-})
+    startGame();
+});
 
 $('body').on("touchend", (event) => {
-    if (!gameStarted) {
-        setTimeout(() => nextSequence(), 500);
-    }
-})
+    startGame();
+});
 
 $('.btn').click((event) => {
-    playSound(event.target.id);
-    animatePress(event.target.id);
-    userClickPattern.push(event.target.id);
-    checkAnswer(userClickPattern.length - 1);
-})
+    if (userTurn && gameStarted) {
+        playSound(event.target.id);
+        animatePress(event.target.id);
+        userClickPattern.push(event.target.id);
+        checkAnswer(userClickPattern.length - 1);
+    }
+});
+
+function startGame() {
+    if (!gameStarted) {
+        setTimeout(() => nextSequence(), 700);
+    }
+}
 
 function animatePress(color) {
     $("#" + color).addClass("pressed");
@@ -39,7 +44,7 @@ function checkAnswer(currentLevel) {
         if (userClickPattern[currentLevel] === gamePattern[currentLevel]) {
             // If the user has finished the sequence
             if (userClickPattern.length === gamePattern.length) {
-                // Give the user 1 second to screw up, then continue the game with the next color in the sequence
+                userTurn = false;
                 setTimeout(() => nextSequence(), 1000);
             }
         } else {
@@ -52,16 +57,14 @@ function nextSequence() {
     // Create a random number between 0 and 3 that will be used to randomly choose a color and play that color's sound
     randomNumber = Math.floor(Math.random() * (4) + 1) - 1;
     randomChosenColor = buttonColors[randomNumber];
-    playSound(randomChosenColor);
     gamePattern.push(randomChosenColor);
-    $("#" + randomChosenColor).fadeOut(100).fadeIn(100);
     gameStarted = true;
     $('h1').text("level " + ++level);
     userClickPattern = [];
+    playGamePattern();
 }
 
 function resetGame() {
-    $('h1').text("Game Over, Press Any Key or Tap to Start");
     gamePattern = [];
     userClickPattern = [];
     gameStarted = false;
@@ -72,5 +75,15 @@ function gameOver() {
     $("body").addClass("game-over");
     setTimeout(() => $("body").removeClass("game-over"), 200);
     playSound("wrong");
+    $('h1').text("Game Over. You made it to level " + level +  ". Press Any Key or Tap to Start");
     resetGame();
+}
+
+async function playGamePattern() {
+    for (const color of gamePattern) {
+        playSound(color);
+        $("#" + color).fadeOut(100).fadeIn(100);
+        await new Promise(resolve => setTimeout(resolve, 700));
+    };
+    userTurn = true;
 }
