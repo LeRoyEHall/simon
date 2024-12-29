@@ -6,13 +6,13 @@ level = 0;
 
 $('body').on("keydown", (event) => {
     if (!gameStarted) {
-        nextSequence();
+        setTimeout(() => nextSequence(), 500);
     }
 })
 
 $('body').on("touchend", (event) => {
     if (!gameStarted) {
-        nextSequence();
+        setTimeout(() => nextSequence(), 500);
     }
 })
 
