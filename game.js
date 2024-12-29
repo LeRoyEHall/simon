@@ -61,7 +61,7 @@ function nextSequence() {
 }
 
 function resetGame() {
-    $('h1').text("Game Over, Press Any Key to Start");
+    $('h1').text("Game Over, Press Any Key or Tap to Start");
     gamePattern = [];
     userClickPattern = [];
     gameStarted = false;
