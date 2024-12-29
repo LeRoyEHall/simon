@@ -19,6 +19,8 @@ $('.btn').click((event) => {
         animatePress(event.target.id);
         userClickPattern.push(event.target.id);
         checkAnswer(userClickPattern.length - 1);
+    } else if (!gameStarted) {
+        startGame();
     }
 });
 
