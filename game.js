@@ -10,6 +10,12 @@ $('body').on("keydown", (event) => {
     }
 })
 
+$('body').on("touchstart", (event) => {
+    if (!gameStarted) {
+        nextSequence();
+    }
+})
+
 $('.btn').click((event) => {
     playSound(event.target.id);
     animatePress(event.target.id);
